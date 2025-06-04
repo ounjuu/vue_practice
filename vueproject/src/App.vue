@@ -1,30 +1,35 @@
 <template>
+  <!-- 상단 메뉴바 -->
   <div class="menu">
     <a v-for="(menuname, index) in menus" :key="index">{{ menuname }}</a>
   </div>
-  <div v-for="(product, index) in onerooms" :key="index">
-    <img
-      :src="product.image"
-      class="room-img"
-      @click="
+
+  <!-- 배너 -->
+  <Discount />
+
+  <!-- 상품들 -->
+  <Card
+    v-for="(product, index) in onerooms"
+    :key="index"
+    :product="product"
+    :index="index"
+    :itemnum="itemnum"
+    :handleModal="handleModal"
+    @open="
+      (idx) => {
         handleModal = true;
-        itemnum = index;
-      "
-    />
-    <h4>{{ product.title }}</h4>
-    <p>{{ product.price }} 만원</p>
-    <!-- <button @click="increase(product)">허위매물신고</button
-    ><span>신고수 : {{ product.count }}</span> -->
-  </div>
-  <div class="black-bg" v-if="handleModal === true">
-    <div class="white-bg">
-      <img :src="onerooms[itemnum].image" />
-      <h4>{{ onerooms[itemnum].title }}</h4>
-      <p>{{ onerooms[itemnum].price }}</p>
-      <p>{{ onerooms[itemnum].content }}</p>
-      <button @click="handleModal = false">닫기</button>
-    </div>
-  </div>
+        itemnum = idx;
+      }
+    "
+  />
+
+  <!-- 모달 -->
+  <Modal
+    :onerooms="onerooms"
+    :itemnum="itemnum"
+    :handleModal="handleModal"
+    @close="handleModal = false"
+  />
 </template>
 
 <script>
@@ -33,6 +38,9 @@ import room1 from "@/assets/room1.jpg";
 import room2 from "@/assets/room2.jpg";
 
 import roomdata from "@/assets/oneroom";
+import Discount from "./Discount.vue";
+import Modal from "./Modal.vue";
+import Card from "./Card.vue";
 
 export default {
   name: "App",
@@ -54,7 +62,11 @@ export default {
       product.count++;
     },
   },
-  components: {},
+  components: {
+    Discount: Discount,
+    Modal: Modal,
+    Card: Card,
+  },
 };
 </script>
 
@@ -65,30 +77,16 @@ body {
 div {
   box-sizing: border-box;
 }
-.black-bg {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  padding: 20px;
-  top: 0;
-  left: 0;
-  z-index: 10;
+.discount {
+  background-color: #eee;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.white-bg {
-  width: 80%;
-  background: white;
-  border-radius: 8px;
-  padding: 40px 20px;
-  height: 90vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+
 .menu {
   background: darkslateblue;
   padding: 15px;
