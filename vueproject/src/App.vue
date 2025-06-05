@@ -5,7 +5,7 @@
   </div>
 
   <!-- 배너 -->
-  <Discount v-if="showDiscount == true" />
+  <Discount :discount="discount" v-if="discount >= 0" />
 
   <!-- 가격순 버튼 -->
   <button @click="priceSort">가격순정렬</button>
@@ -65,7 +65,8 @@ export default {
       ],
       menus: ["Home", "Shop", "About"],
       handleModal: false,
-      showDiscount: true,
+      showDiscount: 30,
+      discount: 30,
     };
   },
   methods: {
@@ -82,10 +83,17 @@ export default {
     },
   },
   mounted() {
-    setTimeout(() => {
-      this.showDiscount = false;
-    }, 2000);
+    setInterval(() => {
+      this.discount--;
+      if (this.discount < 0) {
+        clearInterval(this.interval);
+      }
+    }, 1000);
   },
+  beforeUnmount() {
+    clearInterval(this.interval);
+  },
+
   components: {
     Discount: Discount,
     Modal: Modal,

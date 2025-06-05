@@ -23,9 +23,15 @@ export default {
   },
   data() {
     return {
-      month: 1,
-      oldMonth: 1,
+      month: 3,
+      oldMonth: 3,
     };
+  },
+  beforeUpdate() {
+    if (this.month == 2) {
+      alert("2개월 이상부터 입력 가능합니다.");
+      this.month = 3;
+    }
   },
   watch: {
     month(a) {
