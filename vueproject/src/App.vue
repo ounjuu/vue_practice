@@ -5,7 +5,11 @@
   </div>
 
   <!-- 배너 -->
-  <Discount />
+  <Discount v-if="showDiscount == true" />
+
+  <!-- 가격순 버튼 -->
+  <button @click="priceSort">가격순정렬</button>
+  <button @click="sortBack">되돌리기</button>
 
   <!-- 상품들 -->
   <Card
@@ -24,12 +28,17 @@
   />
 
   <!-- 모달 -->
-  <Modal
-    :onerooms="onerooms"
-    :itemnum="itemnum"
-    :handleModal="handleModal"
-    @close="handleModal = false"
-  />
+  <!-- <div class="start" :class="{ end: handleModal }"> -->
+  <!-- 위에 코드 대신 transition 사용 가능 -->
+  <transition name="fade">
+    <Modal
+      :onerooms="onerooms"
+      :itemnum="itemnum"
+      :handleModal="handleModal"
+      @close="handleModal = false"
+    />
+  </transition>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -47,6 +56,7 @@ export default {
   data() {
     return {
       itemnum: 0,
+      oneroomsOriginal: [...roomdata],
       onerooms: roomdata,
       products: [
         { name: "역삼동 원룸", price: 60, count: 0, img: room0 },
@@ -55,12 +65,26 @@ export default {
       ],
       menus: ["Home", "Shop", "About"],
       handleModal: false,
+      showDiscount: true,
     };
   },
   methods: {
     increase(product) {
       product.count++;
     },
+    priceSort() {
+      this.onerooms.sort(function (a, b) {
+        return a.price - b.price;
+      });
+    },
+    sortBack() {
+      this.onerooms = [...this.oneroomsOriginal];
+    },
+  },
+  mounted() {
+    setTimeout(() => {
+      this.showDiscount = false;
+    }, 2000);
   },
   components: {
     Discount: Discount,
@@ -100,5 +124,31 @@ div {
   padding-top: 25px;
   width: 350px;
   aspect-ratio: 2/1;
+}
+/* 애니메이션 효과 */
+/* .start {
+  opacity: 0;
+  transition: all 1s;
+}
+.end {
+  opacity: 1;
+} */
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: all 1s;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-leave-from {
+  opacity: 1;
+}
+.fade-leave-active {
+  transition: all 1s;
+}
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
