@@ -24,7 +24,25 @@ export default {
   data() {
     return {
       month: 1,
+      oldMonth: 1,
     };
+  },
+  watch: {
+    month(a) {
+      if (isNaN(a) == true) {
+        alert("숫자만 입력하세요.");
+        this.month = this.oldMonth.toString();
+        return;
+      }
+      if (a >= 13) {
+        alert("12개월 이하로 입력해주세요.");
+        this.month = 12;
+        this.oldMonth = 12;
+        return;
+      }
+
+      this.oldMonth = a;
+    },
   },
 };
 </script>
