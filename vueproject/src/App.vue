@@ -26,7 +26,6 @@
       }
     "
   />
-
   <!-- 모달 -->
   <!-- <div class="start" :class="{ end: handleModal }"> -->
   <!-- 위에 코드 대신 transition 사용 가능 -->
@@ -39,6 +38,8 @@
     />
   </transition>
   <!-- </div> -->
+  <router-link to="/">되돌아가기</router-link>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -50,6 +51,7 @@ import roomdata from "@/assets/oneroom";
 import Discount from "./Discount.vue";
 import Modal from "./Modal.vue";
 import Card from "./Card.vue";
+import { RouterLink } from "vue-router";
 
 export default {
   name: "App",
